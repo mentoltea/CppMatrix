@@ -3,6 +3,7 @@
 
 #include <fstream>
 
+template <typename T>
 class Matrix {
 public:
     unsigned int a, b; // dimensions of matrix
@@ -10,8 +11,8 @@ public:
     // @param a Number of rows
     // @param b Number of columns
     // @param initvalue Value to initialize matrix with
-    Matrix(unsigned int a, unsigned int b, double initvalue=0);
-    Matrix(std::ifstream fd);
+    Matrix(unsigned int a, unsigned int b, T initvalue=0);
+    Matrix(std::ifstream& fd);
     
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
@@ -19,6 +20,8 @@ public:
     
     Matrix& operator=(const Matrix& other);
     Matrix& operator=(Matrix&& other);
+    
+    T* operator[](unsigned int y);
     
     
     Matrix operator*(const Matrix& other);
@@ -31,7 +34,9 @@ public:
     
     Matrix operator^(unsigned int n);
     
-    double det();
+    bool operator==(const Matrix& other);
+
+    T det();
     
     Matrix inverse();
 
@@ -39,12 +44,21 @@ public:
 
     unsigned int rank();
 
-    double **get_data();
+    T **get_data();
+
+    static Matrix Idenity(unsigned int n);
+
+    void save(std::ofstream& fd);
 
 private:
-    double **data = nullptr;
+    T **data = nullptr;
 };
 
 
-
 #endif // MATRIX_H 
+
+
+#ifdef MATRIX_IMPL
+
+
+#endif // MATRIX_IMPL
