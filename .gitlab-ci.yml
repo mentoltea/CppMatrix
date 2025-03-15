@@ -8,8 +8,8 @@ stages:          # List of stages for jobs, and their order of execution
 build-job-ubuntu:
   stage: build
   before_script:
-    - mkdir build 
-    - cd build
+    - cd googletest
+    - ls -a -l
     - cmake ../googletest
     - cmake --build . -j8
     - mv lib ../gtest/lib
