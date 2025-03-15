@@ -8,6 +8,7 @@ stages:          # List of stages for jobs, and their order of execution
 build-job-ubuntu:
   stage: build
   before_script:
+    - ls googletest/
     - git clone https://github.com/google/googletest.git 
     - cd googletest
     - mkdir build 
@@ -28,6 +29,7 @@ build-job-ubuntu:
 build-job-centos:
   stage: build
   before_script:
+    - ls googletest/
     - git clone https://github.com/google/googletest.git 
     - cd googletest
     - mkdir build 
