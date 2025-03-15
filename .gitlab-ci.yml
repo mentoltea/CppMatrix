@@ -8,12 +8,14 @@ stages:          # List of stages for jobs, and their order of execution
 build-job-ubuntu:
   stage: build
   before_script:
+    - git clone https://github.com/google/googletest.git 
+    - cd googletest
     - mkdir build 
     - cd build
-    - cmake ../googletest
+    - cmake ..
     - cmake --build . -j8
-    - mv lib ../gtest/lib
-    - cd ..
+    - mv lib ../../gtest/lib
+    - cd ../..
   script:
     - mkdir bin
     - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
@@ -26,12 +28,14 @@ build-job-ubuntu:
 build-job-centos:
   stage: build
   before_script:
+    - git clone https://github.com/google/googletest.git 
+    - cd googletest
     - mkdir build 
     - cd build
-    - cmake ../googletest
+    - cmake ..
     - cmake --build . -j8
-    - mv lib ../gtest/lib
-    - cd ..
+    - mv lib ../../gtest/lib
+    - cd ../..
   script:
     - mkdir bin
     - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
