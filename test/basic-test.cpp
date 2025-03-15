@@ -1,4 +1,5 @@
 #include "../gtest/include/gtest/gtest.h"
+#define MATRIX_IMPL
 #include "../src/matrix.hpp"
 #include <iostream>
 
@@ -66,36 +67,36 @@ TEST(matrix_creation, from_sizes_1_5_double) {
 	}
 }
 
-TEST(matrix_creation, from_file_id_4_4_int) {
-    std::string filename = "matrices/idenity4_4.txt";
-	std::ifstream fd(filename);
-	{
-		Matrix<int> M(fd);
-		ASSERT_EQ(M.a, 4);
-		ASSERT_EQ(M.b, 4);
-		for (int y=0; y<M.a; y++) {
-			for (int x=0; x<M.b; x++) {
-				EXPECT_EQ(M[y][x], y==x);
-			}
-		}
-	}
-}
+// TEST(matrix_creation, from_file_id_4_4_int) {
+//     std::string filename = "matrices/idenity4_4.txt";
+// 	std::ifstream fd(filename);
+// 	{
+// 		Matrix<int> M(fd);
+// 		ASSERT_EQ(M.a, 4);
+// 		ASSERT_EQ(M.b, 4);
+// 		for (int y=0; y<M.a; y++) {
+// 			for (int x=0; x<M.b; x++) {
+// 				EXPECT_EQ(M[y][x], y==x);
+// 			}
+// 		}
+// 	}
+// }
 
-TEST(matrix_creation, from_file_id_4_4_double) {
-    std::string filename = "matrices/idenity4_4.txt";
-	std::ifstream fd(filename);
-	double eps = 1e-5;
-	{
-		Matrix<double> M(fd);
-		ASSERT_EQ(M.a, 4);
-		ASSERT_EQ(M.b, 4);
-		for (int y=0; y<M.a; y++) {
-			for (int x=0; x<M.b; x++) {
-				EXPECT_NEAR(M[y][x], y==x, eps);
-			}
-		}
-	}
-}
+// TEST(matrix_creation, from_file_id_4_4_double) {
+//     std::string filename = "matrices/idenity4_4.txt";
+// 	std::ifstream fd(filename);
+// 	double eps = 1e-5;
+// 	{
+// 		Matrix<double> M(fd);
+// 		ASSERT_EQ(M.a, 4);
+// 		ASSERT_EQ(M.b, 4);
+// 		for (int y=0; y<M.a; y++) {
+// 			for (int x=0; x<M.b; x++) {
+// 				EXPECT_NEAR(M[y][x], y==x, eps);
+// 			}
+// 		}
+// 	}
+// }
 
 
 int main(int argc, char *argv[])

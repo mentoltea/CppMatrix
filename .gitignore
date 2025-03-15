@@ -2,3 +2,4 @@ doxygen/*
 ignore.*
 out.*
 .vscode/*
+bin/*
