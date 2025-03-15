@@ -5,22 +5,37 @@ stages:          # List of stages for jobs, and their order of execution
   - package
   - package-test
 
-build-job:
+build-job-ubuntu:
   stage: build
   script:
     - mkdir bin
     - g++ .\test\basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
   tags:
-    - ubuntu
-    - centos
   artifacts:
     paths:
       - basic_test
 
-test-job:
+build-job-centos:
+  stage: build
+  script:
+    - mkdir bin
+    - g++ .\test\basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
+  tags:
+    - centos
+  artifacts:
+    paths:
+      - basic_test
+    
+test-job-ubuntu:
   stage: test
   script:
     - ./basic_test
   tags:
     - ubuntu
+
+test-job-centos:
+  stage: test
+  script:
+    - ./basic_test
+  tags:
     - centos
