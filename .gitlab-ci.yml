@@ -7,21 +7,38 @@ stages:          # List of stages for jobs, and their order of execution
 
 build-job-ubuntu:
   stage: build
+  before_script:
+    - cd googletest
+    - mkdir build
+    - cd build
+    - cmake ..
+    - cmake --build . -j8
+    - mv lib ../../gtest/lib
+    - cd ../..
   script:
     - mkdir bin
-    - g++ ./test/basic-test.cpp -I./gtest/include -lgtest -o basic_test
+    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
   tags:
+    - ubuntu
   artifacts:
     paths:
       - basic_test
 
 build-job-centos:
   stage: build
+  before_script:
+    - cd googletest
+    - mkdir build
+    - cd build
+    - cmake ..
+    - cmake --build . -j8
+    - mv lib ../../gtest/lib
+    - cd ../..
   script:
     - mkdir bin
-    - g++ ./test/basic-test.cpp -I./gtest/include -lgtest -o basic_test
+    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
   tags:
-    - centos
+    - ubuntu
   artifacts:
     paths:
       - basic_test

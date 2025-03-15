@@ -3,3 +3,5 @@ ignore.*
 out.*
 .vscode/*
 bin/*
+gtest/lib/*
+googletest/*
