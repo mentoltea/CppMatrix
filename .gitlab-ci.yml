@@ -43,7 +43,7 @@ build-job-centos:
     - cd ../..
   script:
     - mkdir bin
-    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
+    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -lpthread -o basic_test
   tags:
     - centos
   artifacts:
