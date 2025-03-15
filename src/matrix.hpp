@@ -15,7 +15,7 @@ public:
     // @param b Number of columns
     // @param initvalue Value to initialize matrix with
     Matrix(unsigned int a, unsigned int b, T initvalue=0);
-    // Matrix(std::ifstream& fd);
+    Matrix(std::ifstream& fd);
     
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
@@ -44,8 +44,8 @@ public:
     
     Matrix operator^(unsigned int n) const;
     
-    bool operator==(const Matrix& other);
-    bool operator!=(const Matrix& other);
+    bool operator==(const Matrix& other) const;
+    bool operator!=(const Matrix& other) const;
 
     T det() const;
     
@@ -53,14 +53,14 @@ public:
 
     Matrix inverse() const;
 
-    // unsigned int rank() const;
+    unsigned int rank() const;
 
     T **get_data();
 
     static Matrix Idenity(unsigned int n);
 
-    // static Matrix read(std::ifstream& fd) ;
-    // void save(std::ofstream& fd) const ;
+    static Matrix read(std::ifstream& fd) ;
+    void save(std::ofstream& fd) const ;
     
     void print(int identation=3) const;
 
@@ -339,8 +339,8 @@ Matrix<T> Matrix<T>::operator^(unsigned int n) const {
 }
 
 template<typename T>
-bool Matrix<T>::operator==(const Matrix& other) {
-    if (this->a != other.a || this.b != other.b) return false;
+bool Matrix<T>::operator==(const Matrix& other) const {
+    if (this->a != other.a || this->b != other.b) return false;
     for (int y=0; y<a; y++) {
         for(int x=0; x<b; x++) {
             if (this->data[y][x] != other.data[y][x]) return false;
@@ -350,7 +350,7 @@ bool Matrix<T>::operator==(const Matrix& other) {
 }
 
 template<typename T>
-bool Matrix<T>::operator!=(const Matrix& other) {
+bool Matrix<T>::operator!=(const Matrix& other) const {
     return !(*this == other);
 }
 
@@ -407,18 +407,34 @@ Matrix<T> Matrix<T>::inverse() const {
     return result;
 }
 
-// template<typename T>
-// unsigned int Matrix<T>::rank() const {
-//     unsigned int R = a;
-//     if (b < a) R = b;
+template<typename T>
+unsigned int Matrix<T>::rank() const {
+    if ((*this) == Matrix<T>(a, b, 0)) return 0;
+    
+    unsigned int R = a;
+    if (b < a) R = b;
 
-//     if (R==1) {
-//         if ((*this) != Matrix<T>(a, b, 0)) return 1;
-//         return 0;
-//     }
-    
-    
-// }
+    if (R==1) return 1;
+
+    unsigned int size = std::min(this->a, this->b);
+    bool stopflag = false;
+    while (!stopflag) {
+        for (int i=0; i < this->a - size + 1; i++) {
+            for (int j=0; j < this->b - size + 1; j++) {
+                Matrix sub = this->submatrix(i, size, j, size);
+                T D = sub.det();
+                if (D != 0) {
+                    stopflag = true;
+                    break;
+                }
+            }
+            if (stopflag) break;
+        }
+        if (!stopflag) {size--;}
+    }
+
+    return size;
+}
 
 template<typename T>
 T **Matrix<T>::get_data() {
