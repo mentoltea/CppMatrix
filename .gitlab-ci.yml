@@ -8,6 +8,7 @@ stages:          # List of stages for jobs, and their order of execution
 build-job-ubuntu:
   stage: build
   before_script:
+    - g++ --version
     - ls googletest/
     - rm -rf googletest/
     - git clone https://github.com/google/googletest.git 
@@ -30,8 +31,9 @@ build-job-ubuntu:
 build-job-centos:
   stage: build
   before_script:
+    - g++ --version
+    - ls googletest/
     # on CentOS submodule is copied with original repository
-    # - ls googletest/
     # - git clone https://github.com/google/googletest.git 
     - cd googletest
     - cd build
