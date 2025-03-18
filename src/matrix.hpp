@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <fstream>
 #include <assert.h>
+#include <stdint.h>
 
 template <typename T>
 class Matrix {
@@ -64,7 +65,6 @@ public:
     
     void print(int identation=3) const;
 
-
 private:
     T **data = nullptr;
 };
@@ -83,6 +83,47 @@ Matrix<T> operator*(T k, const Matrix<T>& A);
 
 // #define MATRIX_IMPL
 #ifdef MATRIX_IMPL
+
+template<typename T>
+Matrix<T> Matrix<T>::read(std::ifstream& fd) {
+    unsigned int height, width;
+    fd >> height;
+    fd >> width;
+
+    assert(height != 0);
+    assert(width != 0);
+    
+    Matrix<T> result(height, width);
+    for (int y=0; y<height; y++) {
+        for (int x=0; x<width; x++) {
+            if (fd.eof()) {
+                assert(0 && "File ended");
+            }
+            fd >> result[y][x];
+        }
+        fd.ignore(LONG_LONG_MAX, '\n');
+    }
+
+    return result;
+}
+
+template<typename T>
+void Matrix<T>::save(std::ofstream& fd) const  {
+    fd << this->a << " " << this->b << std::endl;
+
+    for (int y=0; y<a; y++) {
+        for (int x=0; x<b; x++) {
+            fd << this->data[y][x];
+            if (x != b-1) fd << " ";
+        }
+        fd << std::endl;
+    }
+}
+
+template<typename T>
+Matrix<T>::Matrix(std::ifstream& fd) {
+    (*this) = Matrix<T>::read(fd);
+}
 
 template<typename T>
 Matrix<T>::Matrix(unsigned int a, unsigned int b, T initvalue) {

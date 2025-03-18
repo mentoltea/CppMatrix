@@ -21,12 +21,12 @@ build-job-ubuntu:
     - cd ../..
   script:
     - mkdir bin
-    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test
+    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test_ubuntu
   tags:
     - ubuntu
   artifacts:
     paths:
-      - basic_test
+      - basic_test_ubuntu
 
 build-job-centos:
   stage: build
@@ -43,12 +43,12 @@ build-job-centos:
     - cd ../..
   script:
     - mkdir bin
-    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -lpthread -o basic_test
+    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -lpthread -o basic_test_centos
   tags:
     - centos
   artifacts:
     paths:
-      - basic_test
+      - basic_test_centos
 
 
 
