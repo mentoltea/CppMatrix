@@ -14,6 +14,7 @@ build-job-ubuntu:
     # so we need to clone it manually
     - rm -rf googletest/
     - git clone https://github.com/google/googletest.git 
+    - git checkout v1.13.x
     - cd googletest
     - mkdir build 
     - cd build
