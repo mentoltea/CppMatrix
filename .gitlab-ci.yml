@@ -20,8 +20,8 @@ build-job-ubuntu:
     - mv lib ../../gtest/lib
     - cd ../..
   script:
-    - mkdir bin
-    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -o basic_test_ubuntu
+    - make all
+    - mv basic_test basic_test_ubuntu
   tags:
     - ubuntu
   artifacts:
@@ -42,8 +42,8 @@ build-job-centos:
     - mv lib ../../gtest/lib
     - cd ../..
   script:
-    - mkdir bin
-    - g++ ./test/basic-test.cpp -I./gtest/include -L./gtest/lib -lgtest -lpthread -o basic_test_centos
+    - make all
+    - mv basic_test basic_test_centos
   tags:
     - centos
   artifacts:
