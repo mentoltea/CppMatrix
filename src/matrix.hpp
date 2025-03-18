@@ -101,7 +101,7 @@ Matrix<T> Matrix<T>::read(std::ifstream& fd) {
             }
             fd >> result[y][x];
         }
-        fd.ignore(LONG_LONG_MAX, '\n');
+        fd.ignore(INT64_MAX, '\n');
     }
 
     return result;
