@@ -36,6 +36,7 @@ public:
     Matrix operator*(const Matrix& other) const;
     Matrix operator+(const Matrix& other) const;
     Matrix operator-(const Matrix& other) const;
+    Matrix operator-() const;
     
     Matrix& operator+=(const Matrix& other);
     Matrix& operator-=(const Matrix& other);
@@ -311,6 +312,18 @@ Matrix<T> Matrix<T>::operator-(const Matrix& other) const {
     for (int y=0; y<a; y++) {
         for (int x=0; x<b; x++) {
             result.data[y][x] = this->data[y][x] - other.data[y][x];
+        }
+    }
+    
+    return result;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator-() const {
+    Matrix<T> result(a, b);
+    for (int y=0; y<a; y++) {
+        for (int x=0; x<b; x++) {
+            result.data[y][x] = -data[y][x];
         }
     }
     

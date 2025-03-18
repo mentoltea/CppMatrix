@@ -1,6 +1,6 @@
-stages:          # List of stages for jobs, and their order of execution
-  - build
-  - test
+stages:
+  - build # build googletests & tests, artifact tests (why dont run?)
+  - test # run tests
   - deploy
   - package
   - package-test
@@ -10,6 +10,8 @@ build-job-ubuntu:
   before_script:
     - g++ --version
     - ls googletest/
+    # on ubuntu submodule is NOT copied for some reason
+    # so we need to clone it manually
     - rm -rf googletest/
     - git clone https://github.com/google/googletest.git 
     - cd googletest
@@ -22,11 +24,13 @@ build-job-ubuntu:
   script:
     - make all
     - mv basic_test basic_test_ubuntu
+    - mv calculation_test calculation_test_ubuntu
   tags:
     - ubuntu
   artifacts:
     paths:
       - basic_test_ubuntu
+      - calculation_test_ubuntu
 
 build-job-centos:
   stage: build
@@ -44,11 +48,13 @@ build-job-centos:
   script:
     - make all
     - mv basic_test basic_test_centos
+    - mv calculation_test calculation_test_centos
   tags:
     - centos
   artifacts:
     paths:
       - basic_test_centos
+      - calculation_test_centos
 
 
 
@@ -58,13 +64,15 @@ build-job-centos:
 test-job-ubuntu:
   stage: test
   script:
-    - ./basic_test
+    - .\basic_test_ubuntu
+    - .\calculation_test_ubuntu
   tags:
     - ubuntu
 
 test-job-centos:
   stage: test
   script:
-    - ./basic_test
+    - .\basic_test_centos
+    - .\calculation_test_centos
   tags:
     - centos

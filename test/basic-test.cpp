@@ -246,6 +246,21 @@ TEST(matrix_creation, double_transcripted) {
 	}
 }
 
+
+TEST(matrix_saving, idenity_negative_save) {
+	Matrix<double> A = Matrix<double>::Idenity(3);
+
+	std::ofstream fdout("matrices/idenity_negative.txt");
+	(-2.0*A).save(fdout);
+	fdout.close();
+	
+	std::ifstream fdin("matrices/idenity_negative.txt");
+	Matrix<double> B(fdin);
+	fdin.close();
+
+	EXPECT_TRUE((-2.0*A) == B);
+}
+
 int main(int argc, char *argv[])
 {
 	::testing::InitGoogleTest(&argc, argv);
