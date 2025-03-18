@@ -22,7 +22,7 @@ build-job-ubuntu:
     - mv lib ../../gtest/lib
     - cd ../..
   script:
-    - make all
+    - make all CFLAGS=--std=c++14
     - mv basic_test basic_test_ubuntu
     - mv calculation_test calculation_test_ubuntu
   tags:
