@@ -6,6 +6,7 @@
 #include <fstream>
 #include <assert.h>
 #include <stdint.h>
+#include <exception>
 
 template <typename T>
 class Matrix {
@@ -70,11 +71,6 @@ private:
     T **data = nullptr;
 };
 
-// template<typename T>
-// Matrix<T> operator*(const Matrix<T>& A, const Matrix<T>& B);
-
-// template<typename T>
-// Matrix<T> Idenity(unsigned int n);
 
 template<typename T>
 Matrix<T> operator*(T k, const Matrix<T>& A);
@@ -91,14 +87,21 @@ Matrix<T> Matrix<T>::read(std::ifstream& fd) {
     fd >> height;
     fd >> width;
 
-    assert(height != 0);
-    assert(width != 0);
+    // assert(height != 0);
+    // assert(width != 0);
+    if (height==0) {
+        throw std::runtime_error("READING: Cannot create matrix with 0 rows");
+    }
+    if (width==0) {
+        throw std::runtime_error("READING: Cannot create matrix with 0 columns");
+    }
     
     Matrix<T> result(height, width);
     for (int y=0; y<height; y++) {
         for (int x=0; x<width; x++) {
             if (fd.eof()) {
-                assert(0 && "File ended");
+                // assert(0 && "File ended");
+                throw std::runtime_error("READING: File ended before matrix was filled");
             }
             fd >> result[y][x];
         }
@@ -128,7 +131,13 @@ Matrix<T>::Matrix(std::ifstream& fd) {
 
 template<typename T>
 Matrix<T>::Matrix(unsigned int a, unsigned int b, T initvalue) {
+    if (a==0) {
+        throw std::runtime_error("READING: Cannot create matrix with 0 rows");
+    }
     this->a = a;
+    if (b==0) {
+        throw std::runtime_error("READING: Cannot create matrix with 0 columns");
+    }
     this->b = b;
     this->data = new T*[a];
     for (int y=0; y<a; y++) {
@@ -255,7 +264,7 @@ T* Matrix<T>::operator[](unsigned int y) {
 // template<typename T>
 // Matrix<T> operator*(const Matrix<T>& A, const Matrix<T>& B) {
 //     assert(A.b == B.a);
-// 
+
 //     Matrix<T> result(A.a, B.b);
 //     for (int y=0; y<A.a; y++) {
 //         for (int x=0; x<B.b; x++) {
@@ -266,13 +275,15 @@ T* Matrix<T>::operator[](unsigned int y) {
 //             result.data[y][x] = sum;
 //         }
 //     }
-// 
+
 //     return result;
 // }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix& other) const {
-    assert(this->b == other.a);
+    // assert(this->b == other.a);
+    if (this->b != other.a) 
+        throw std::runtime_error("MATRIX MULTIPLICATION: can multiply only matrices (M x N) * (N x K)");
 
     Matrix<T> result(this->a, other.b);
     for (int y=0; y<this->a; y++) {
@@ -290,8 +301,10 @@ Matrix<T> Matrix<T>::operator*(const Matrix& other) const {
 
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix& other) const {
-    assert(this->a == other.a);
-    assert(this->b == other.b);
+    // assert(this->a == other.a);
+    // assert(this->b == other.b);
+    if (this->a != other.b || this->b != other.b) 
+        throw std::runtime_error("ADDING: can add only matrices with the same size");
 
     Matrix<T> result(a, b);
     for (int y=0; y<a; y++) {
@@ -305,9 +318,11 @@ Matrix<T> Matrix<T>::operator+(const Matrix& other) const {
 
 template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix& other) const {
-    assert(this->a == other.a);
-    assert(this->b == other.b);
-    
+    // assert(this->a == other.a);
+    // assert(this->b == other.b);
+    if (this->a != other.b || this->b != other.b) 
+        throw std::runtime_error("SUBTRACTION: can subtract only matrices with the same size");
+
     Matrix<T> result(a, b);
     for (int y=0; y<a; y++) {
         for (int x=0; x<b; x++) {
@@ -332,9 +347,11 @@ Matrix<T> Matrix<T>::operator-() const {
 
 template<typename T>
 Matrix<T>& Matrix<T>::operator+=(const Matrix& other) {
-    assert(this->a == other.a);
-    assert(this->b == other.b);
-
+    // assert(this->a == other.a);
+    // assert(this->b == other.b);
+    if (this->a != other.b || this->b != other.b) 
+        throw std::runtime_error("ADDING: can add only matrices with the same size");
+        
     for (int y=0; y<a; y++) {
         for (int x=0; x<b; x++) {
             this->data[y][x] = this->data[y][x] + other.data[y][x];
@@ -346,8 +363,10 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix& other) {
 
 template<typename T>
 Matrix<T>& Matrix<T>::operator-=(const Matrix& other) {
-    assert(this->a == other.a);
-    assert(this->b == other.b);
+    // assert(this->a == other.a);
+    // assert(this->b == other.b);
+    if (this->a != other.b || this->b != other.b) 
+        throw std::runtime_error("SUBTRACTION: can subtract only matrices with the same size");
 
     for (int y=0; y<a; y++) {
         for (int x=0; x<b; x++) {
@@ -384,7 +403,10 @@ Matrix<T>& Matrix<T>::operator*=(T k) {
 
 template<typename T>
 Matrix<T> Matrix<T>::operator^(unsigned int n) const {
-    assert(this->a == this->b);
+    // assert(this->a == this->b);
+    if (this->a != this->b) 
+        throw std::runtime_error("POWER: can power only square matrices");
+
     Matrix result = Matrix::Idenity(this->a);
     for (int i=0; i<n; i++) {
         result = result * (*this);
@@ -412,7 +434,10 @@ bool Matrix<T>::operator!=(const Matrix& other) const {
 
 template<typename T>
 T Matrix<T>::det() const {
-    assert(this->a == this->b);
+    // assert(this->a == this->b);
+    if (this->a != this->b) 
+        throw std::runtime_error("DETERMINANT: can compute det only for square matrices");
+
     if (this->a == 1) {
         return data[0][0];
     }
@@ -446,10 +471,16 @@ Matrix<T> Matrix<T>::trans() const {
 
 template<typename T>
 Matrix<T> Matrix<T>::inverse() const {
-    assert(this->a == this->b);
+    // assert(this->a == this->b);
+    if (this->a != this->b) 
+        throw std::runtime_error("INVERSE: can compute inverse only for square matrices");
+
 
     T D = det();
-    assert(D != 0);
+    // assert(D != 0);
+    if (D == 0) 
+        throw std::runtime_error("INVERSE: can compute inverse only for matrices with non-zero determinant");
+
 
     Matrix result(a, b);
     for (int y=0; y<a; y++) {
