@@ -98,6 +98,120 @@ TEST(matrix_creation, from_file_id_4_4_double) {
 	}
 }
 
+TEST(matrix_creation, with_0_rows) {
+	int a = 0;
+	int b = 1;
+	try {
+		Matrix<double> M(a, b);
+		FAIL();
+	} catch (std::runtime_error& e) {
+		SUCCEED();
+	}
+}
+
+TEST(matrix_creation, with_0_columns) {
+	int a = 1;
+	int b = 0;
+	try {
+		Matrix<double> M(a, b);
+		FAIL();
+	} catch (std::runtime_error& e) {
+		SUCCEED();
+	}
+}
+
+TEST(matrix_creation, multiply_different_sizes) {
+	Matrix<double> A(2, 3);
+	Matrix<double> B(2, 2);
+	try {
+		B*A;
+	} catch (std::runtime_error& e) {
+		FAIL();
+	}
+
+	try {
+		A*B;
+		FAIL();
+	} catch (std::runtime_error& e) {
+		SUCCEED();
+	}
+}
+
+TEST(matrix_creation, add_different_sizes) {
+	Matrix<double> A(2, 3);
+	Matrix<double> B(2, 2);
+	try {
+		A+B;
+		FAIL();
+	} catch (std::runtime_error& e) {
+		try {
+			A+=B;
+			FAIL();
+		} catch (std::runtime_error& e) {
+			SUCCEED();
+		}
+	}
+}
+
+TEST(matrix_creation, subtract_different_sizes) {
+	Matrix<double> A(2, 3);
+	Matrix<double> B(2, 2);
+	try {
+		A-B;
+		FAIL();
+	} catch (std::runtime_error& e) {
+		try {
+			A-=B;
+			FAIL();
+		} catch (std::runtime_error& e) {
+			SUCCEED();
+		}
+	}
+}
+
+TEST(matrix_creation, power_nonsquare) {
+	Matrix<double> A(2, 3);
+	try {
+		A^3;
+		FAIL();
+	} catch (std::runtime_error& e) {
+		SUCCEED();
+	}
+}
+
+TEST(matrix_creation, det_nonsquare) {
+	Matrix<double> A(2, 3);
+	try {
+		A.det();
+		FAIL();
+	} catch (std::runtime_error& e) {
+		SUCCEED();
+	}
+}
+
+TEST(matrix_creation, inverse_nonsquare) {
+	Matrix<double> A(2, 3);
+	try {
+		A.inverse();
+		FAIL();
+	} catch (std::runtime_error& e) {
+		SUCCEED();
+	}
+}
+
+TEST(matrix_creation, inverse_0_det) {
+	Matrix<double> A(2, 2);
+	A[0][0] = 1;
+	A[0][1] = 2;
+	try {
+		A.inverse();
+		FAIL();
+	} catch (std::runtime_error& e) {
+		SUCCEED();
+	}
+}
+
+
 TEST(matrix_creation, copy_constructor) {
 	std::string filename = "matrices/m1det0rank2.txt";
 	std::ifstream fd(filename);

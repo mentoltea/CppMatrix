@@ -173,10 +173,12 @@ Matrix<T>::Matrix(Matrix&& other) {
 
 template<typename T>
 Matrix<T>::~Matrix() {
-    for (int y=0; y<a; y++) {
-        delete[] this->data[y];
+    if (data) {
+        for (int y=0; y<a; y++) {
+            if (this->data[y]) delete[] this->data[y];
+        }
+        delete[] this->data;
     }
-    delete[] this->data;
 }
 
 
