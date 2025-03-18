@@ -4,3 +4,4 @@ out.*
 .vscode/*
 bin/*
 gtest/lib/*
+basic_test.exe
