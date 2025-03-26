@@ -120,6 +120,39 @@ TEST(matrix_creation, with_0_columns) {
 	}
 }
 
+TEST(matrix_creation, from_initializer_list) {
+	double eps = 1e-5;
+	Matrix<double> M = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+		{10, 11, 12}
+    };
+	for (int y=0; y<M.a; y++) {
+		for (int x=0; x<M.b; x++) {
+			EXPECT_NEAR(M[y][x], 3*y+x+1, eps);
+		}
+	}
+}
+
+TEST(matrix_creation, from_initializer_list_0_size) {
+	try {
+		Matrix<double> M = {};
+		FAIL();
+	} catch (std::runtime_error& e) {
+		try {
+			Matrix<double> M = {
+				{1, 2, 3},
+				{}, 
+				{7, 8, 9}
+			};
+			FAIL();
+		} catch(std::runtime_error&) {
+			SUCCEED();
+		}
+	}
+}
+
 TEST(matrix_creation, multiply_different_sizes) {
 	Matrix<double> A(2, 3);
 	Matrix<double> B(2, 2);

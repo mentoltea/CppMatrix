@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <exception>
+#include <initializer_list>
 
 template <typename T>
 class Matrix {
@@ -18,6 +19,7 @@ public:
     // @param initvalue Value to initialize matrix with
     Matrix(unsigned int a, unsigned int b, T initvalue=0);
     Matrix(std::ifstream& fd);
+    Matrix(const std::initializer_list< std::initializer_list<T> > &m);
     
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
@@ -132,11 +134,11 @@ Matrix<T>::Matrix(std::ifstream& fd) {
 template<typename T>
 Matrix<T>::Matrix(unsigned int a, unsigned int b, T initvalue) {
     if (a==0) {
-        throw std::runtime_error("READING: Cannot create matrix with 0 rows");
+        throw std::runtime_error("CREATING: Cannot create matrix with 0 rows");
     }
     this->a = a;
     if (b==0) {
-        throw std::runtime_error("READING: Cannot create matrix with 0 columns");
+        throw std::runtime_error("CREATING: Cannot create matrix with 0 columns");
     }
     this->b = b;
     this->data = new T*[a];
@@ -145,6 +147,35 @@ Matrix<T>::Matrix(unsigned int a, unsigned int b, T initvalue) {
         for (int x=0; x<b; x++) {
             data[y][x] = initvalue;
         }
+    }
+}
+
+template<typename T>
+Matrix<T>::Matrix(const std::initializer_list< std::initializer_list<T> > &m) {
+    this->a = m.size();
+    if (a==0) {
+        throw std::runtime_error("CREATING: Cannot create matrix with 0 rows");
+    }
+    unsigned int minb = m.begin()->size();
+    for (auto it = m.begin(); it != m.end(); it++) {
+        if (it->size() < minb) minb = it->size();
+    }
+    if (minb==0) {
+        throw std::runtime_error("CREATING: Cannot create matrix with 0 columns");
+    }
+    b = minb;
+
+    this->data = new T*[a];
+    
+    auto ity = m.begin();
+    for (int y=0; y<a; y++) {
+        data[y] = new T[b];
+        auto itx = ity->begin();
+        for (int x=0; x<b; x++) {
+            data[y][x] = *itx;
+            itx++;
+        }
+        ity++;
     }
 }
 
