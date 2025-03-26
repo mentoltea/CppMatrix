@@ -1,14 +1,14 @@
 #include "gtest/gtest.h"
 #include <iostream>
 
+// on ubuntu image name "minor" is taken by some macro
 #pragma push_macro("minor")
 #undef minor
 #define MATRIX_IMPL
 #include "matrix.hpp"
-#pragma pop_macro("minor")
 
 TEST(matrix_creation, from_sizes_0_int) {
-    int a = 5;
+	int a = 5;
 	int b = 5;
 	int c = 0;
 	{
@@ -24,7 +24,7 @@ TEST(matrix_creation, from_sizes_0_int) {
 }
 
 TEST(matrix_creation, from_sizes_0_double) {
-    int a = 5;
+	int a = 5;
 	int b = 5;
 	double c = 0;
 	{
@@ -40,7 +40,7 @@ TEST(matrix_creation, from_sizes_0_double) {
 }
 
 TEST(matrix_creation, from_sizes_2_int) {
-    int a = 5;
+	int a = 5;
 	int b = 5;
 	int c = 2;
 	{
@@ -56,7 +56,7 @@ TEST(matrix_creation, from_sizes_2_int) {
 }
 
 TEST(matrix_creation, from_sizes_1_5_double) {
-    int a = 5;
+	int a = 5;
 	int b = 5;
 	double c = 1.5;
 	{
@@ -72,7 +72,7 @@ TEST(matrix_creation, from_sizes_1_5_double) {
 }
 
 TEST(matrix_creation, from_file_id_4_4_int) {
-    std::string filename = "matrices/idenity4_4.txt";
+	std::string filename = "matrices/idenity4_4.txt";
 	std::ifstream fd(filename);
 	{
 		Matrix<int> M(fd);
@@ -87,7 +87,7 @@ TEST(matrix_creation, from_file_id_4_4_int) {
 }
 
 TEST(matrix_creation, from_file_id_4_4_double) {
-    std::string filename = "matrices/idenity4_4.txt";
+	std::string filename = "matrices/idenity4_4.txt";
 	std::ifstream fd(filename);
 	double eps = 1e-5;
 	{
@@ -127,7 +127,7 @@ TEST(matrix_creation, with_0_columns) {
 TEST(matrix_creation, from_initializer_list) {
 	double eps = 1e-5;
 	Matrix<double> M = {
-        {1, 2, 3},
+		{1, 2, 3},
         {4, 5, 6},
         {7, 8, 9},
 		{10, 11, 12}
@@ -165,7 +165,7 @@ TEST(matrix_creation, multiply_different_sizes) {
 	} catch (std::runtime_error& e) {
 		FAIL();
 	}
-
+	
 	try {
 		A*B;
 		FAIL();
@@ -257,7 +257,7 @@ TEST(matrix_creation, copy_constructor) {
 		Matrix<double> M(fd);
 		
 		Matrix<double> A(M);
-
+		
 		EXPECT_TRUE(A==M);
 	}
 }
@@ -271,7 +271,7 @@ TEST(matrix_creation, copy_assingment) {
 		
 		Matrix<double> A(1,1);
 		A = M;
-
+		
 		EXPECT_TRUE(A==M);
 	}
 }
@@ -283,9 +283,9 @@ TEST(matrix_creation, move_constructor) {
 	{
 		Matrix<double> M(fd);
 		Matrix<double> copy = M;
-
+		
 		Matrix<double> A(std::move(copy));
-
+		
 		EXPECT_TRUE(A==M);
 		EXPECT_TRUE(copy.get_data()==nullptr);
 	}
@@ -301,7 +301,7 @@ TEST(matrix_creation, move_assingment) {
 		
 		Matrix<double> A(1,1);
 		A = std::move(copy) ;
-
+		
 		EXPECT_TRUE(A==M);
 		EXPECT_TRUE(copy.get_data()==nullptr);
 	}
@@ -319,7 +319,7 @@ TEST(matrix_creation, submatrix) {
 		
 		EXPECT_NEAR(M[0][0], 2, eps);
 		EXPECT_NEAR(M[0][1], 1, eps);		
-
+		
 		EXPECT_NEAR(M[1][0], 0, eps);
 		EXPECT_NEAR(M[1][1], 1, eps);
 	}
@@ -340,7 +340,7 @@ TEST(matrix_creation, submatrix_full) {
 }
 
 TEST(matrix_creation, minor) {
-    std::string filename = "matrices/m1det0rank2.txt";
+	std::string filename = "matrices/m1det0rank2.txt";
 	std::ifstream fd(filename);
 	double eps = 1e-5;
 	{
@@ -351,7 +351,7 @@ TEST(matrix_creation, minor) {
 		
 		EXPECT_NEAR(M[0][0], 1, eps);
 		EXPECT_NEAR(M[0][1], 3, eps);		
-
+		
 		EXPECT_NEAR(M[1][0], -1, eps);
 		EXPECT_NEAR(M[1][1], 1, eps);
 	}
@@ -378,7 +378,7 @@ TEST(matrix_creation, transcripted) {
 	{
 		Matrix<double> A(fd);
 		Matrix<double> T = A.trans();
-
+		
 		for (int y=0; y<A.a; y++) {
 			for (int x=0; x<A.b; x++) {
 				EXPECT_NEAR(A[y][x], T[x][y], eps);
@@ -400,7 +400,7 @@ TEST(matrix_creation, double_transcripted) {
 
 TEST(matrix_saving, idenity_negative_save) {
 	Matrix<double> A = Matrix<double>::Idenity(3);
-
+	
 	std::ofstream fdout("matrices/idenity_negative.txt");
 	(-2.0*A).save(fdout);
 	fdout.close();
@@ -408,7 +408,7 @@ TEST(matrix_saving, idenity_negative_save) {
 	std::ifstream fdin("matrices/idenity_negative.txt");
 	Matrix<double> B(fdin);
 	fdin.close();
-
+	
 	EXPECT_TRUE((-2.0*A) == B);
 }
 
@@ -417,3 +417,5 @@ int main(int argc, char *argv[])
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }
+
+#pragma pop_macro("minor")
