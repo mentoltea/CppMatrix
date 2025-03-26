@@ -10,6 +10,7 @@ build-job-ubuntu:
   before_script:
     - g++ --version
     - sudo apt update && sudo apt upgrade
+    - sudo apt install gcc-17
     - g++ --version
     - ls googletest/
     # on ubuntu submodule is NOT copied for some reason
@@ -17,7 +18,8 @@ build-job-ubuntu:
     # - rm -rf googletest/
     # - git clone -b v1.15.x https://github.com/google/googletest.git 
     - cd googletest
-    - mkdir build 
+    # - git checkout v1.15.x 
+    # - mkdir build 
     - cd build
     - cmake ..
     - cmake --build . -j8
