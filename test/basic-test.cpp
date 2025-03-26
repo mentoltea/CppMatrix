@@ -1,7 +1,11 @@
 #include "gtest/gtest.h"
+#include <iostream>
+
+#pragma push_macro("minor")
+#undef minor
 #define MATRIX_IMPL
 #include "matrix.hpp"
-#include <iostream>
+#pragma pop_macro("minor")
 
 TEST(matrix_creation, from_sizes_0_int) {
     int a = 5;

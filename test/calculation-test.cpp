@@ -1,7 +1,11 @@
 #include "gtest/gtest.h"
+#include <iostream>
+
+#pragma push_macro("minor")
+#undef minor
 #define MATRIX_IMPL
 #include "matrix.hpp"
-#include <iostream>
+#pragma pop_macro("minor")
 
 TEST(calculation, idenity_multiply) {
     std::string filename = "matrices/m2det7rank3.txt";
