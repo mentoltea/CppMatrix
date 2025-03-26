@@ -28,8 +28,7 @@ public:
     Matrix& operator=(const Matrix& other);
     Matrix& operator=(Matrix&& other);
     
-    Matrix submatrix(unsigned int yfrom, unsigned int ysize,
-        unsigned int xfrom, unsigned int xsize) const;
+    Matrix submatrix(unsigned int yfrom, unsigned int ysize, unsigned int xfrom, unsigned int xsize) const;
 
     Matrix minor(unsigned int y, unsigned int x) const;
 

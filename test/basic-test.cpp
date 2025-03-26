@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #define MATRIX_IMPL
-#include "../src/matrix.hpp"
+#include "matrix.hpp"
 #include <iostream>
 
 TEST(matrix_creation, from_sizes_0_int) {
