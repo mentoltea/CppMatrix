@@ -10,7 +10,7 @@ build-job-ubuntu:
   before_script:
     - g++ --version
     - sudo apt update && sudo apt upgrade
-    - sudo apt install gcc-17
+    - sudo apt install gcc
     - g++ --version
     - ls googletest/
     # on ubuntu submodule is NOT copied for some reason
