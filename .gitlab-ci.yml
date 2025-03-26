@@ -68,6 +68,7 @@ build-job-centos:
 test-job-ubuntu:
   stage: test
   script:
+    - ls
     - .\basic_test_ubuntu
     - .\calculation_test_ubuntu
   tags:
@@ -76,6 +77,7 @@ test-job-ubuntu:
 test-job-centos:
   stage: test
   script:
+    - ls
     - .\basic_test_centos
     - .\calculation_test_centos
   tags:
