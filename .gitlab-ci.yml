@@ -5,6 +5,9 @@ stages:
   - package
   - package-test
 
+#
+# BUILD
+#
 build-job-ubuntu:
   stage: build
   before_script:
@@ -62,9 +65,9 @@ build-job-centos:
 
 
 
-
-
-
+#
+# TEST
+#
 test-job-ubuntu:
   stage: test
   script:
@@ -82,3 +85,23 @@ test-job-centos:
     - ./calculation_test_centos
   tags:
     - centos
+
+
+#
+# DEPLOY
+#
+
+deploy-prod-job:
+  stage: deploy
+  script: 
+    - doxygen
+  environment:
+    name: production
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  tags:
+    - centos
+  release:
+    tag_name: '$CI_COMMIT_TAG'
+    description: '$CI_COMMIT_TAG'
