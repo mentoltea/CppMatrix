@@ -9,11 +9,13 @@ build-job-ubuntu:
   stage: build
   before_script:
     - g++ --version
+    - sudo apt update && sudo apt upgrade
+    - g++ --version
     - ls googletest/
     # on ubuntu submodule is NOT copied for some reason
     # so we need to clone it manually
-    - rm -rf googletest/
-    - git clone -b v1.15.x https://github.com/google/googletest.git 
+    # - rm -rf googletest/
+    # - git clone -b v1.15.x https://github.com/google/googletest.git 
     - cd googletest
     - mkdir build 
     - cd build
