@@ -94,6 +94,7 @@ test-job-centos:
 deploy-prod-job:
   stage: deploy
   script: 
+    - apt install doxygen
     - doxygen
   environment:
     name: production
