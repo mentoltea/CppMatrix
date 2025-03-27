@@ -24,7 +24,7 @@ build-job-ubuntu:
     # - rm -rf googletest/
     # - git clone -b v1.15.x https://github.com/google/googletest.git 
     - cd googletest
-    # - git checkout v1.15.x 
+    - git checkout v1.15.x 
     - mkdir build 
     - cd build
     - cmake ..
@@ -109,7 +109,6 @@ deploy-documentation-job:
       - "doxygen/**"
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: manual
   tags:
     - ubuntu
 
