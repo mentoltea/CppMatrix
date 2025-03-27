@@ -101,7 +101,7 @@ deploy-prod-job:
     # - curl --location --output /usr/local/bin/release-cli "https://gitlab.com/api/v4/projects/gitlab-org%2Frelease-cli/packages/generic/release-cli/latest/release-cli-linux-amd64"
     # - sudo chmod +x /usr/local/bin/release-cli
     - release-cli -v
-    - apt-get -y install doxygen
+    # - apt-get -y install doxygen
   script: 
     - rm -rf gtest googletest test matrices Makefile
     - doxygen
