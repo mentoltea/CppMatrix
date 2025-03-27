@@ -114,7 +114,10 @@ deploy-documentation-job:
 
 deploy-prod-job:
   stage: deploy
-  dependencies: [deploy-documentation-job]
+  # dependencies: [deploy-documentation-job] 
+  needs: 
+    - job: deploy-documentation-job
+      artifacts: true
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   before_script:
     - ls
