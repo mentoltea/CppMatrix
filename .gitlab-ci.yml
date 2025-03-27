@@ -97,7 +97,7 @@ deploy-prod-job:
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   before_script:
     - ls
-    - apt -y install curl
+    - apt-get -y install curl
     - curl --location --output /usr/local/bin/release-cli "https://gitlab.com/api/v4/projects/gitlab-org%2Frelease-cli/packages/generic/release-cli/latest/release-cli-linux-amd64"
     - sudo chmod +x /usr/local/bin/release-cli
     - release-cli -v
