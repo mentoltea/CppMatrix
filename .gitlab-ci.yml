@@ -5,6 +5,9 @@ stages:
   - package
   - package-test
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 #
 # BUILD
 #
