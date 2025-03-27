@@ -93,14 +93,17 @@ test-job-centos:
 
 deploy-prod-job:
   stage: deploy
+  dependencies: []
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   before_script:
     - ls
+    - sudo apt -y install curl
     - curl --location --output /usr/local/bin/release-cli "https://gitlab.com/api/v4/projects/gitlab-org%2Frelease-cli/packages/generic/release-cli/latest/release-cli-linux-amd64"
     - sudo chmod +x /usr/local/bin/release-cli
     - release-cli -v
     - apt-get -y install doxygen
   script: 
+    - rm -rf gtest googletest test matrices Makefile
     - doxygen
     - ls
     - ls doxygen
