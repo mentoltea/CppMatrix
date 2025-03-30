@@ -130,6 +130,13 @@ deploy-prod-job:
     - ls
     - ls doxygen
     - echo "Deploying..."
+  after_script:
+    - |
+      release-cli create \ 
+      --name "Release $CI_COMMIT_BRANCH$CI_COMMIT_TAG" \
+      --tag-name "v${MAJOR}.${MINOR}.${REVISION}-$CI_COMMIT_TAG" \
+      --description "$CI_COMMIT_MESSAGE" \ 
+      --assets-link "{\"name\":\"doxygen\",\"filepath\":\"/doxygen/**\"}"
   environment:
     name: production
   rules:
@@ -139,11 +146,3 @@ deploy-prod-job:
     - if: $CI_COMMIT_TAG
   tags:
     - ubuntu
-  release:
-    script:
-      - |
-        release-cli create \ 
-        --name "Release $CI_COMMIT_BRANCH$CI_COMMIT_TAG" \
-        --tag-name "v${MAJOR}.${MINOR}.${REVISION}-$CI_COMMIT_TAG" \
-        --description "$CI_COMMIT_MESSAGE" \ 
-        --assets-link "{\"name\":\"doxygen\",\"filepath\":\"/doxygen/**\"}"
