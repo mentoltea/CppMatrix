@@ -6,13 +6,16 @@ stages:
   - package-test
 
 variables:
-  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_STRATEGY: none
+  GIT_SUBMODULE_DEPTH: 1
 
 #
 # BUILD
 #
 build-job-ubuntu:
   stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
   before_script:
     - g++ --version
     - sudo apt update && sudo apt upgrade
@@ -44,6 +47,8 @@ build-job-ubuntu:
 
 build-job-centos:
   stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
   before_script:
     - g++ --version
     - ls googletest/
