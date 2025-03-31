@@ -146,20 +146,27 @@ deploy-prod-job:
     - ls
     - ls doxygen
     - echo "Deploying..."
+    - release-cli create
+      --name "Release $CI_COMMIT_REF-$CI_COMMIT_SHORT_SHA"
+      --tag_name "$CI_COMMIT_REF"
+      --ref "$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA"
+      --description "$CI_COMMIT_MESSAGE"
+      --assets-links "{\"name\":\"Documentation\", 
+      \"url\": \"https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download\"}"
   artifacts:
     name: "Release $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
     paths:
       - "doxygen/**"
-  release:
-    ref: '$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA'
-    name: 'Release $CI_COMMIT_REF-$CI_COMMIT_SHORT_SHA'
-    tag_name: '$CI_COMMIT_REF'
-    description: '$CI_COMMIT_MESSAGE'
-    assets:
-      links:
-        - name: 'Documentation'
-          url: 'https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download'
-          # https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/75472/artifacts/download
+  # release:
+  #   name: 'Release $CI_COMMIT_REF-$CI_COMMIT_SHORT_SHA'
+  #   tag_name: '$CI_COMMIT_REF'
+  #   ref: '$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA'
+  #   description: '$CI_COMMIT_MESSAGE'
+  #   assets:
+  #     links:
+  #       - name: 'Documentation'
+  #         url: 'https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download'
+  #         # https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/75472/artifacts/download
   environment:
     name: production
   rules:
