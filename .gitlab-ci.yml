@@ -169,6 +169,6 @@ deploy-prod-job:
     - if: $CI_COMMIT_TAG =~ "/gitlab-ci-test-*/gm"
       when: never
     - if: $CI_COMMIT_TAG
-      when: on_succeed  
+      when: on-success  
   tags:
     - ubuntu
