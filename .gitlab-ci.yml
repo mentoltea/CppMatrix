@@ -123,17 +123,17 @@ deploy-documentation-job:
 
 deploy-prod-job:
   stage: deploy
-  dependencies: [] 
-  # dependencies: [deploy-documentation-job] 
-  # needs: 
-  #   - job: deploy-documentation-job
-  #     artifacts: true
+  # dependencies: [] 
+  dependencies: [deploy-documentation-job] 
+  needs: 
+    - job: deploy-documentation-job
+      artifacts: true
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   before_script:
     - ls
     - release-cli -v
   script: 
-    - rm -rf gtest googletest test matrices Makefile
+    - rm -rf gtest googletest test matrices Makefile Doxyfile
     - ls
     - ls doxygen
     - echo "Deploying..."
@@ -142,7 +142,10 @@ deploy-prod-job:
       --name "Release $CI_COMMIT_BRANCH$CI_COMMIT_TAG"
       --tag-name "v${MAJOR}.${MINOR}.${REVISION}-$CI_COMMIT_TAG"
       --description "$CI_COMMIT_MESSAGE"
-      --assets-link "{\"name\":\"doxygen\",\"filepath\":\"/doxygen/**\"}"
+      --assets-link "
+      {\"name\":\"doxygen\",\"filepath\":\"/doxygen/**\"},
+      {\"name\":\"src\",\"filepath\":\"/src/**\"},
+      "
   environment:
     name: production
   rules:
