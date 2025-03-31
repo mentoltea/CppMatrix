@@ -119,6 +119,7 @@ deploy-documentation-job:
     - ls doxygen
   artifacts:
     name: "Documentation $CI_COMMIT_REF_NAME/$CI_COMMIT_SHORT_SHA"
+    ref: "$CI_COMMIT_BRANCH"
     paths:
       - "doxygen/**"
   rules:
@@ -152,9 +153,12 @@ deploy-prod-job:
     #   --description "$CI_COMMIT_MESSAGE"
     #   --assets-link "{\"name\":\"doxygen\",\"filepath\":\"/doxygen/**\"}"
     #   --assets-link "{\"name\":\"src\",\"filepath\":\"/src/**\"}"
+  artifacts:
+    paths:
+      - "doxygen/**"
   release:
     name: 'Release $CI_COMMIT_REF_NAME $CI_COMMIT_SHORT_SHA'
-    tag_name: '$CI_COMMIT_REF_NAME $CI_COMMIT_SHA'
+    tag_name: '$CI_COMMIT_REF_NAME $CI_COMMIT_SHORT_SHA'
     ref: '$CI_COMMIT_BRANCH'
     description: '$CI_COMMIT_MESSAGE'
     assets:
