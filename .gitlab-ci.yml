@@ -158,8 +158,8 @@ deploy-prod-job:
       - "doxygen/**"
   release:
     name: 'Release $CI_COMMIT_REF_NAME'
-    tag_name: '$CI_COMMIT_REF_SLUG'
-    ref: '$CI_COMMIT_SHORT_SHA'
+    tag_name: '$CI_COMMIT_REF_NAME'
+    ref: '$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA'
     description: '$CI_COMMIT_MESSAGE'
     assets:
       links:
