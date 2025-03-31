@@ -143,8 +143,8 @@ deploy-prod-job:
       --tag-name "v${MAJOR}.${MINOR}.${REVISION}-$CI_COMMIT_TAG"
       --description "$CI_COMMIT_MESSAGE"
       --assets-link "
-      {\"name\":\"doxygen\",\"filepath\":\"/doxygen/**\"},
-      {\"name\":\"src\",\"filepath\":\"/src/**\"},
+      {"name":"doxygen","filepath":"/doxygen/**"},
+      {"name":"src","filepath":"/src/**"}
       "
   environment:
     name: production
