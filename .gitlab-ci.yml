@@ -142,26 +142,23 @@ deploy-prod-job:
     - ls
     - release-cli -v
   script: 
-    - rm -rf gtest googletest test matrices Makefile Doxyfile
+    # - rm -rf gtest googletest test matrices Makefile Doxyfile
     - ls
     - ls doxygen
     - echo "Deploying..."
-    - echo "test" >> t.txt
   artifacts:
     name: "Release $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
     paths:
       - "doxygen/**"
-      - "t.txt"
   release:
     name: 'Release $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA'
-    tag_name: '$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA'
+    tag_name: '$CI_COMMIT_REF_SLUG'
     ref: '$CI_COMMIT_SHORT_SHA'
     description: '$CI_COMMIT_MESSAGE'
     assets:
       links:
         - name: 'Documentation'
           url: 'https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download'
-          filepath: '/doxygen'
           # https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/75472/artifacts/download
   environment:
     name: production
