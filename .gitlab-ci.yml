@@ -151,8 +151,7 @@ deploy-prod-job:
       --tag_name "$CI_COMMIT_REF"
       --ref "$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA"
       --description "$CI_COMMIT_MESSAGE"
-      --assets-links "{\"name\":\"Documentation\", 
-      \"url\": \"https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download\"}"
+      --assets-links "{\"name\":\"Documentation\", \"url\":\"https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download\"}"
   artifacts:
     name: "Release $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
     paths:
