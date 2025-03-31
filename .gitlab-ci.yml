@@ -15,7 +15,7 @@ variables:
 build-job-ubuntu:
   stage: build
   variables:
-    GIT_SUBMODULE_STRATEGY: normal
+    GIT_SUBMODULE_STRATEGY: none
   before_script:
     - g++ --version
     - sudo apt update && sudo apt upgrade
@@ -24,6 +24,8 @@ build-job-ubuntu:
     - ls googletest/
     # on ubuntu submodule is NOT copied for some reason
     # so we need to clone it manually
+    #
+    # on ubuntu g++ is lower c++17 so we need to fetch old version of googletest
     - rm -rf googletest/
     - git clone -b v1.15.x https://github.com/google/googletest.git 
     - cd googletest
@@ -144,6 +146,7 @@ deploy-prod-job:
     - ls
     - ls doxygen
     - echo "Deploying..."
+    - echo "$CI_API_V4_URL"
   # after_script:
     # - release-cli create 
     #   --name "Release $CI_COMMIT_BRANCH$CI_COMMIT_TAG"
@@ -163,7 +166,9 @@ deploy-prod-job:
     assets:
       links:
         - name: 'Documentation'
-          url: 'https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/file/doxygen'
+          url: 'https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download'
+          filepath: '/doxygen'
+          # https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/75472/artifacts/download
   environment:
     name: production
   rules:
