@@ -140,7 +140,8 @@ deploy-prod-job:
   # after_script:
     - release-cli create 
       --name "Release $CI_COMMIT_BRANCH$CI_COMMIT_TAG"
-      --tag-name "v${MAJOR}.${MINOR}.${REVISION}-$CI_COMMIT_TAG"
+      --tag-name "$CI_COMMIT_TAG"
+      --refs "$CI_COMMIT_SHA"
       --description "$CI_COMMIT_MESSAGE"
       --assets-link "{\"name\":\"doxygen\",\"filepath\":\"/doxygen/**\"}"
       --assets-link "{\"name\":\"src\",\"filepath\":\"/src/**\"}"
