@@ -152,7 +152,7 @@ deploy-prod-job:
       - "doxygen/**"
   release:
     name: 'Release $CI_COMMIT_TAG'
-    tag_name: '$CI_COMMIT_TAG'
+    tag_name: '$CI_COMMIT_REF_SLUG'
     ref: '$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA'
     description: '$CI_COMMIT_MESSAGE'
     assets:
@@ -166,6 +166,9 @@ deploy-prod-job:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: manual
     - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
+    - if: $CI_COMMIT_TAG =~ "/gitlab-ci-test-*/gm"
+      when: never
     - if: $CI_COMMIT_TAG
+      when: on_succeed  
   tags:
     - ubuntu
