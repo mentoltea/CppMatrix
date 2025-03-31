@@ -141,11 +141,11 @@ deploy-prod-job:
   before_script:
     - ls
     - release-cli -v
-  # script: 
-  #   # - rm -rf gtest googletest test matrices Makefile Doxyfile
-  #   - ls
-  #   - ls doxygen
-  #   - echo "Deploying..."
+  script: 
+    # - rm -rf gtest googletest test matrices Makefile Doxyfile
+    - ls
+    - ls doxygen
+    - echo "Deploying..."
   #   - release-cli create
   #     --name "Release $CI_COMMIT_REF-$CI_COMMIT_SHORT_SHA"
   #     --tag_name "$CI_COMMIT_REF"
