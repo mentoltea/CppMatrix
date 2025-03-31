@@ -154,7 +154,7 @@ deploy-prod-job:
     #   --assets-link "{\"name\":\"src\",\"filepath\":\"/src/**\"}"
   release:
     name: 'Release $CI_COMMIT_REF_NAME $CI_COMMIT_SHORT_SHA'
-    tag_name: '$CI_COMMIT_SHA'
+    tag_name: '$CI_COMMIT_REF_NAME $CI_COMMIT_SHORT_SHA'
     description: '$CI_COMMIT_MESSAGE'
     assets:
       links:
