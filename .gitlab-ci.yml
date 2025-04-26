@@ -151,7 +151,7 @@ package-job-centos:
     - rpmdev-setuptree
     - rm -rf googletest gtest
     - ls ~
-    - ls -R ~/rmpbuild
+    - ls -R ~/rpmbuild
     - mkdir matrix-1.0.0
     - cp ./src/matrix.hpp matrix-1.0.0
     - tar --create --file matrix-1.0.0.tar.gz matrix-1.0.0
