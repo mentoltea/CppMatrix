@@ -156,6 +156,7 @@ package-job-centos:
     - rm -rf googletest gtest
     - ls ~
     - ls -R ~/rpmbuild
+    - CHANGELOG_DATE=$(date '+%a %b %d %Y')
     - mkdir matrix-1.0.0
     - cp ./src/matrix.hpp matrix-1.0.0
     - tar --create --file matrix-1.0.0.tar.gz matrix-1.0.0
