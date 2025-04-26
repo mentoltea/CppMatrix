@@ -2,7 +2,7 @@ Package: matrix
 Version: 1.0
 Section: unknown
 Priority: optional
-Depends: libstdc++-6, libgcc_s_seh-1
+Depends:
 Architecture: amd64
 Essential: no
 Installed-Size: 32768
