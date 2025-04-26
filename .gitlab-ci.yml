@@ -115,8 +115,6 @@ test-job-centos:
 package-job-ubuntu:
   stage: package
   needs:
-    - job: test-job-ubuntu
-      artifacts: false
   before_script:
     - sudo apt-get -y install dpkg debconf debhelper lintian
   script:
@@ -143,8 +141,6 @@ package-job-ubuntu:
 package-job-centos:
   stage: package
   needs:
-    - job: test-job-centos
-      artifacts: false
   before_script:
     - dnf install -y rpmdevtools rpmlint
   script:
@@ -156,14 +152,19 @@ package-job-centos:
     - cp ./src/matrix.hpp matrix-1.0.0
     - tar --create --file matrix-1.0.0.tar.gz matrix-1.0.0
     - mv matrix-1.0.0.tar.gz ~/rpmbuild/SOURCES
-    - rpmdev-newspec matrix
-    - mv matrix.spec ~/rpmbuild/SPECS
+    - cp rpm-manifest.spec ~/rpmbuild/SPECS/matrix.spec
     - tree ~/rpmbuild
+    - rpmbuild -ba ~/rpmbuild/SPECS/matrix.spec
+    - mkdir -p rpm_packages
+    - cp ~/rpmbuild/RPMS/noarch/*.rpm rpm_packages/
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
     - if: $CI_COMMIT_BRANCH == "rpm-packets"
     - if: $CI_COMMIT_TAG
+  artifacts:
+    paths:
+      - rpm_packages/
   tags:
     - centos
 
