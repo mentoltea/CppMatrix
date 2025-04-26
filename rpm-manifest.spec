@@ -26,6 +26,5 @@ rm -rf $RPM_BUILD_ROOT
 ${INSTALL_DIR}/matrix.hpp
 
 %changelog
-* $(date '+%a %b %d %Y') - ${VERSION}-${RELEASE}
+* $(date '+%a %b %d %Y') Your Name <your.email@example.com> - ${VERSION}-${RELEASE}
 - Initial package
-EOF

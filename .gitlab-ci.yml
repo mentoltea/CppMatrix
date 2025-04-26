@@ -48,6 +48,8 @@ build-job-ubuntu:
     paths:
       - basic_test_ubuntu
       - calculation_test_ubuntu
+  rules:
+    - if: $CI_COMMIT_BRANCH != "rpm-packets"
 
 build-job-centos:
   stage: build
@@ -76,6 +78,8 @@ build-job-centos:
     paths:
       - basic_test_centos
       - calculation_test_centos
+  rules:
+    - if: $CI_COMMIT_BRANCH != "rpm-packets"
 
 
 #
@@ -93,6 +97,8 @@ test-job-ubuntu:
     - valgrind ./calculation_test_ubuntu
   tags:
     - ubuntu
+  rules:
+    - if: $CI_COMMIT_BRANCH != "rpm-packets"
 
 test-job-centos:
   stage: test
@@ -106,6 +112,8 @@ test-job-centos:
     - valgrind ./calculation_test_centos
   tags:
     - centos
+  rules:
+    - if: $CI_COMMIT_BRANCH != "rpm-packets"
 
 
 #
