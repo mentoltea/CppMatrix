@@ -1,9 +1,9 @@
 stages:
   - build # build googletests & tests, artifact tests (why dont run?)
   - test # run tests
-  - deploy
   - package
   - package-test
+  - deploy
 
 variables:
   GIT_SUBMODULE_STRATEGY: none
@@ -40,6 +40,7 @@ build-job-ubuntu:
     - make all CFLAGS=--std=c++17
     - mv basic_test basic_test_ubuntu
     - mv calculation_test calculation_test_ubuntu
+    # - mv libmatrix.a libmatrix_ubuntu.a
   tags:
     - ubuntu
   artifacts:
@@ -67,13 +68,13 @@ build-job-centos:
     - make all
     - mv basic_test basic_test_centos
     - mv calculation_test calculation_test_centos
+    # - mv libmatrix.a libmatrix_ubuntu.a
   tags:
     - centos
   artifacts:
     paths:
       - basic_test_centos
       - calculation_test_centos
-
 
 
 #
@@ -107,6 +108,68 @@ test-job-centos:
 
 
 #
+# PACKAGE
+#
+
+package-job-ubuntu:
+  stage: package
+  needs:
+    - job: test-job-ubuntu
+      artifacts: false
+  script:
+    - ls -R
+    - sudo apt-get install dpkg debconf debhelper lintian
+    - mkdir deb-package
+    - mkdir -p deb-package/DEBIAN
+    - mkdir -p deb-package/usr/bin
+    - mkdir -p deb-package/usr/include
+    - cp ./src/matrix.hpp deb-package/usr/include
+    - mv deb-manifest deb-package/DEBIAN/control
+    - dpkg-deb --build ./deb-package
+    - ls -R
+  tags:
+    - ubuntu
+  artifacts:
+    paths:
+      - deb-package.deb
+
+package-job-centos:
+  stage: package
+  needs:
+    - job: test-job-centos
+      artifacts: false
+  script:
+    - ls -R
+
+  tags:
+    - centos
+
+#
+# PACKAGE-TEST
+#
+
+package-test-job-ubuntu:
+  stage: package-test
+  needs:
+    - job: package-job-ubuntu
+      artifacts: true
+  script:
+    - ls -R
+  tags:
+    - ubuntu
+
+package-test-job-centos:
+  stage: package-test
+  needs:
+    - job: package-job-ubuntu
+      artifacts: true
+  script:
+    - ls -R
+  tags:
+    - centos
+
+
+#
 # DEPLOY
 #
 deploy-documentation-job:
@@ -132,50 +195,20 @@ deploy-documentation-job:
 
 deploy-prod-job:
   stage: deploy
-  # dependencies: [] 
-  # dependencies: [deploy-documentation-job] 
   needs: 
     - job: deploy-documentation-job
       artifacts: true
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  before_script:
-    - ls
-    - release-cli -v
+    - job: package-job-centos
+      artifacts: true
+    - job: package-job-ubuntu
+      artifacts: true
+    
   script: 
-    # - rm -rf gtest googletest test matrices Makefile Doxyfile
-    - ls
-    - ls doxygen
-    - echo "Deploying..."
-  #   - release-cli create
-  #     --name "Release $CI_COMMIT_REF-$CI_COMMIT_SHORT_SHA"
-  #     --tag_name "$CI_COMMIT_REF"
-  #     --ref "$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA"
-  #     --description "$CI_COMMIT_MESSAGE"
-  #     --assets-links "{\"name\":\"Documentation\", \"url\":\"https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download\"}"
+    - ls -R
   artifacts:
     name: "Release $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
     paths:
       - "doxygen/**"
-  release:
-    name: 'Release $CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA'
-    tag_name: '$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA'
-    ref: '$CI_COMMIT_BRANCH'
-    description: '$CI_COMMIT_MESSAGE'
-    assets:
-      links:
-        - name: 'Documentation'
-          url: 'https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/$CI_JOB_ID/artifacts/download'
-          # https://vgit.mirea.ru/s7k/agoev_matrix/-/jobs/75472/artifacts/download
-  environment:
-    name: production
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: manual
-    - if: $CI_COMMIT_TAG =~ "/${CI_DEFAULT_BRANCH}-*/gm"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
-    - if: $CI_COMMIT_TAG =~ "/gitlab-ci-test-..*/gm"
-      when: never
-    - if: $CI_COMMIT_TAG
+
   tags:
     - ubuntu

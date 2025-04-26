@@ -6,3 +6,5 @@ bin/*
 gtest/lib/*
 *.exe
 matrices/idenity_negative.txt
+*.o
+*.a
