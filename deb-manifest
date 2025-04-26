@@ -2,9 +2,9 @@ Package: matrix
 Version: 1.0
 Section: unknown
 Priority: optional
-Depends: libstdc++-6 libgcc_s_seh-1
+Depends: libstdc++-6, libgcc_s_seh-1
 Architecture: amd64
 Essential: no
-Installed-Size: 16751
+Installed-Size: 32768
 Maintainer: losst.pro <admin@losst.pro>
 Description: Print hello from losst line
