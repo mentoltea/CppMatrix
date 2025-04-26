@@ -116,9 +116,10 @@ package-job-ubuntu:
   needs:
     - job: test-job-ubuntu
       artifacts: false
+  before_script:
+    - sudo apt-get -y install dpkg debconf debhelper lintian
   script:
     - ls -R
-    - sudo apt-get install dpkg debconf debhelper lintian
     - mkdir deb-package
     - mkdir -p deb-package/DEBIAN
     - mkdir -p deb-package/usr/bin
@@ -175,6 +176,7 @@ package-test-job-centos:
 deploy-documentation-job:
   stage: deploy
   dependencies: []
+  needs:
   before_script:
     - ls
     - apt-get -y install doxygen
