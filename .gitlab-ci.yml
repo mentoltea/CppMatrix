@@ -129,6 +129,11 @@ package-job-ubuntu:
     - mv deb-manifest deb-package/DEBIAN/control
     - dpkg-deb --build ./deb-package
     - ls -R
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
+    - if: $CI_COMMIT_BRANCH == "rpm-packets"
+    - if: $CI_COMMIT_TAG
   tags:
     - ubuntu
   artifacts:
@@ -146,7 +151,11 @@ package-job-centos:
     - rpmdev-setuptree
     - rm -rf googletest gtest
     - ls -R
-
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
+    - if: $CI_COMMIT_BRANCH == "rpm-packets"
+    - if: $CI_COMMIT_TAG
   tags:
     - centos
 
@@ -168,6 +177,7 @@ package-test-job-ubuntu:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
+    - if: $CI_COMMIT_BRANCH == "rpm-packets"
     - if: $CI_COMMIT_TAG
   tags:
     - ubuntu
@@ -182,6 +192,7 @@ package-test-job-centos:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
+    - if: $CI_COMMIT_BRANCH == "rpm-packets"
     - if: $CI_COMMIT_TAG
   tags:
     - centos
