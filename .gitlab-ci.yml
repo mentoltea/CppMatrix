@@ -8,6 +8,7 @@ stages:
 variables:
   GIT_SUBMODULE_STRATEGY: none
   GIT_SUBMODULE_DEPTH: 1
+  GIT_DEPTH: 3
 
 #
 # BUILD
@@ -155,7 +156,8 @@ package-test-job-ubuntu:
     - job: package-job-ubuntu
       artifacts: true
   script:
-    - sudo apt install -y deb-package.deb
+    - ls
+    - sudo apt install -y ./deb-package.deb
     # - diff -q /usr/include/matrix.hpp ./src/matrix.hpp
     - cmp /usr/include/matrix.hpp ./src/matrix.hpp
     - if [ -z $(cmp /usr/include/matrix.hpp ./src/matrix.hpp) ]; then
