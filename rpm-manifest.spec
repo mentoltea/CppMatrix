@@ -16,11 +16,15 @@ A RPM package for TSPP
 %setup -q
 
 %install
-mkdir -p %{buildroot}${INSTALL_DIR}
-install -m 644 %{_builddir}/%{name}-%{version}/matrix.hpp %{buildroot}${INSTALL_DIR}/
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/%{_includedir}
+cp %{name}.hpp $RPM_BUILD_ROOT/%{_includedir}
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %files
-${INSTALL_DIR}/matrix.hpp
+%{_includedir}/%{name}.hpp
 
 %changelog
 * Sat Apr 26 2025 Your Name <your.email@example.com> - ${VERSION}-${RELEASE}

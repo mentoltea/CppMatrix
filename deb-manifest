@@ -7,4 +7,4 @@ Architecture: amd64
 Essential: no
 Installed-Size: 32768
 Maintainer: losst.pro <admin@losst.pro>
-Description: Print hello from losst line
+Description: Simple matrix library for C++
