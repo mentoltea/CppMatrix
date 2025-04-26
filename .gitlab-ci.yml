@@ -161,7 +161,7 @@ package-test-job-ubuntu:
 package-test-job-centos:
   stage: package-test
   needs:
-    - job: package-job-ubuntu
+    - job: package-job-centos
       artifacts: true
   script:
     - ls -R
@@ -205,10 +205,17 @@ deploy-prod-job:
     
   script: 
     - ls -R
+  
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
+    - if: $CI_COMMIT_TAG
+
   artifacts:
-    name: "Release $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
+    name: "Commit $CI_COMMIT_SHORT_SHA"
     paths:
       - "doxygen/**"
-
+      - "*.deb"
+      - "*.rpm"
   tags:
     - ubuntu
