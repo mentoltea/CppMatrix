@@ -17,10 +17,7 @@ A RPM package for TSPP
 
 %install
 mkdir -p %{buildroot}${INSTALL_DIR}
-install -m 644 src/matrix.hpp %{buildroot}${INSTALL_DIR}/matrix.hpp
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+install -m 644 %{_builddir}/%{name}-%{version}/src/matrix.hpp %{buildroot}${INSTALL_DIR}/
 
 %files
 ${INSTALL_DIR}/matrix.hpp
