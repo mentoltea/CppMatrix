@@ -166,6 +166,7 @@ package-job-centos:
     - rpmbuild -ba ~/rpmbuild/SPECS/matrix.spec
     - mkdir -p rpm_packages
     - cp ~/rpmbuild/RPMS/noarch/*.rpm rpm_packages/
+    - tree ~/rpmbuild/
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
@@ -206,7 +207,10 @@ package-test-job-centos:
     - job: package-job-centos
       artifacts: true
   script:
-    - ls -R
+    - ls
+    - dnf install rpm_packages/matrix-1.0.0-1.el7.noarch.rpm
+    - cmp /usr/include/matrix.hpp ./src/matrix.hpp
+    - exit $(cmp /usr/include/matrix.hpp ./src/matrix.hpp)
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
