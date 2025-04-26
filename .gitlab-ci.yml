@@ -146,7 +146,7 @@ package-job-centos:
     - job: test-job-centos
       artifacts: false
   before_script:
-    - sudo dnf install -y rpmdevtools rpmlint
+    - dnf install -y rpmdevtools rpmlint
   script:
     - rpmdev-setuptree
     - rm -rf googletest gtest
