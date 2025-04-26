@@ -9,63 +9,120 @@
 #include <exception>
 #include <initializer_list>
 
+// @param T
+// It can be any type as long as it:
+// 
+// 1. Supports initialization with 0
+// 
+// 2. Direct copy with `memcpy`
+// 
+// 3. Initialization with `>>`
+// 
+// 4. Serialization with `<<`
+// 
+// 5. Basic arithmetic operations (+, -, *, /, +=, -=, *=, /=)
 template <typename T>
 class Matrix {
 public:
-    unsigned int a, b; // dimensions of matrix
+    unsigned int a; // number of rows of matrix
+    unsigned int b; // number of columns of matrix
     
     // @param a Number of rows
     // @param b Number of columns
     // @param initvalue Value to initialize matrix with
+    // @throws `std::runtime_error` on error (if one of sizes is 0)
     Matrix(unsigned int a, unsigned int b, T initvalue=0);
+
+    // @param fd Opened `IFSTREAM` file descriptor to matrix file
+    // @note Is based on `Matrix::read(std::ifstream& fd)`
+    // @throws `std::runtime_error` on error (look `Matrix::read(std::ifstream& fd)` exceptions)
     Matrix(std::ifstream& fd);
+
+    // @param m Initializer list = `{ {...}, {...}, ...}`
+    // @note If inner lists sizes are different, the minimal size is choosen
+    // @throws `std::runtime_error` on error (if one of sizes is 0)
     Matrix(const std::initializer_list< std::initializer_list<T> > &m);
     
+    // @note Uses `memcpy` to copy rows
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     ~Matrix();
-    
+
+    // @note Uses `memcpy` to copy rows
     Matrix& operator=(const Matrix& other);
     Matrix& operator=(Matrix&& other);
     
+    // @returns Submatrix with size (ysize, xsize) taken from (yfrom, xfrom)
     Matrix submatrix(unsigned int yfrom, unsigned int ysize, unsigned int xfrom, unsigned int xsize) const;
 
+    // @returns A matrix missing specified row and column
+    // @note If you are using it to calculate determinant or inverse matrix, better use `.det()` or `.inverse()`
     Matrix minor(unsigned int y, unsigned int x) const;
 
+    // @returns Pointer to specified row
+    // @note Changing data the pointer refers to WILL affect the matrix itself. 
+    // @note DO NOT FREE THE POINTER !
     T* operator[](unsigned int y);
     
-
+    // @throws `std::runtime_error` on mismatching sizes (this.b != other.a)
     Matrix operator*(const Matrix& other) const;
+    // @throws `std::runtime_error` on mismatching sizes
     Matrix operator+(const Matrix& other) const;
+    // @throws `std::runtime_error` on mismatching sizes
     Matrix operator-(const Matrix& other) const;
     Matrix operator-() const;
     
+    // @throws `std::runtime_error` on mismatching sizes
     Matrix& operator+=(const Matrix& other);
+    // @throws `std::runtime_error` on mismatching sizes
     Matrix& operator-=(const Matrix& other);
 
     Matrix operator*(T k) const;
     Matrix& operator*=(T k);
     
+    // @note Raises matrix to non-negative power
+    // @note Only for square matrices !
+    // @throws `std::runtime_error` on non-square matrix
     Matrix operator^(unsigned int n) const;
     
     bool operator==(const Matrix& other) const;
     bool operator!=(const Matrix& other) const;
 
+    // @returns Matrix' determinant
+    // @note Only square matrices!
+    // @throws `std::runtime_error` on non-square matrix
     T det() const;
     
+    // @returns Transcripted matrix
     Matrix trans() const;
 
+    // @return The inverse matrix
+    // @note Only square matrices with det != 0 !
+    // @throws `std::runtime_error` on non-square matrix or if determinant = 0
     Matrix inverse() const;
 
+    // @returns The rank of matrix
+    // @note Works with both square and non-square matrices
     unsigned int rank() const;
 
+    // @returns Pointer [to pointers] to data
+    // @note It is highly suggested NOT TO USE it directly
     T **get_data();
 
+    // @param n Size
+    // @returns Idenity square matrix of size (n, n)
     static Matrix Idenity(unsigned int n);
 
+    // @returns Matrix readen from given file descriptor
+    // @param fd Opened `IFSTREAM` file descriptor to matrix file
+    // @throws `std::runtime_error` on error (0 sizes or too early EOF)
     static Matrix read(std::ifstream& fd) ;
+
+    // @param fd Opened `OFSTREAM` file descriptor to output file 
     void save(std::ofstream& fd) const ;
     
+    // @note Prints matrix to the `stdout`
+    // @param identation The distance between columns
     void print(int identation=3) const;
 
 private:
