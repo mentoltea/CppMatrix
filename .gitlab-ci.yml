@@ -150,7 +150,14 @@ package-job-centos:
   script:
     - rpmdev-setuptree
     - rm -rf googletest gtest
-    - ls -R
+    - ls -R /
+    - mkdir matrix-1.0.0
+    - cp ./src/matrix.hpp matrix-1.0.0
+    - tar --create --file matrix-1.0.0.tar.gz matrix-1.0.0
+    - mv matrix-1.0.0.tar.gz /rpmbuild/SOURCES
+    - rpmdev-newspec matrix
+    - mv matrix.spec /rpmbuild/SPECS
+    - tree /rpmbuild
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == "gitlab-ci-test"
