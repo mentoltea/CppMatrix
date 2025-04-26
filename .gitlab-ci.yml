@@ -266,6 +266,6 @@ deploy-prod-job:
     paths:
       - "doxygen/**"
       - "*.deb"
-      - "*.rpm"
+      - rpm_packages/
   tags:
     - ubuntu
