@@ -29,6 +29,4 @@ An example of valid matrix file:
 ```
 
 # 4. Authors:
-```
 **Agoev T.** - *developer* - [gitlab](https://vgit.mirea.ru/s7k) [github](https://github.com/mentoltea)
-```
