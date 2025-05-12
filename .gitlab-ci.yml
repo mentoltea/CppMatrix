@@ -229,6 +229,10 @@ deploy-documentation-job:
   stage: deploy
   dependencies: []
   needs:
+    - job: package-test-job-ubuntu
+      artifacts: false
+    - job: package-test-job-centos
+      artifacts: false
   before_script:
     - ls
     - apt-get -y install doxygen
