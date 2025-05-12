@@ -150,7 +150,7 @@ package-job-ubuntu:
 package-job-centos:
   stage: package
   needs:
-    - job: test-job-ubuntu
+    - job: test-job-centos
       artifacts: false
   before_script:
     - dnf install -y rpmdevtools rpmlint
