@@ -123,6 +123,8 @@ test-job-centos:
 package-job-ubuntu:
   stage: package
   needs:
+    - job: test-job-ubuntu
+      artifacts: false
   before_script:
     - sudo apt-get -y install dpkg debconf debhelper lintian
   script:
@@ -148,6 +150,8 @@ package-job-ubuntu:
 package-job-centos:
   stage: package
   needs:
+    - job: test-job-ubuntu
+      artifacts: false
   before_script:
     - dnf install -y rpmdevtools rpmlint
   script:
