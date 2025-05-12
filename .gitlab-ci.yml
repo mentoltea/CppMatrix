@@ -48,6 +48,7 @@ build-job-ubuntu:
     paths:
       - basic_test_ubuntu
       - calculation_test_ubuntu
+    name: "Build Ubuntu: $CI_COMMIT_REF_NAME $CI_COMMIT_MESSAGE"
   rules:
     - if: $CI_COMMIT_BRANCH != "rpm-packets"
 
@@ -78,6 +79,7 @@ build-job-centos:
     paths:
       - basic_test_centos
       - calculation_test_centos
+    name: "Build CentOS: $CI_COMMIT_REF_NAME $CI_COMMIT_MESSAGE"
   rules:
     - if: $CI_COMMIT_BRANCH != "rpm-packets"
 
@@ -146,6 +148,7 @@ package-job-ubuntu:
   artifacts:
     paths:
       - deb-package.deb
+    name: "DEB package: $CI_COMMIT_REF_NAME $CI_COMMIT_MESSAGE"
 
 package-job-centos:
   stage: package
@@ -178,6 +181,7 @@ package-job-centos:
   artifacts:
     paths:
       - rpm_packages/
+    name: "RPM package: $CI_COMMIT_REF_NAME $CI_COMMIT_MESSAGE"
   tags:
     - centos
 
@@ -241,7 +245,7 @@ deploy-documentation-job:
     - ls
     - ls doxygen
   artifacts:
-    name: "Documentation $CI_COMMIT_REF_SLUG/$CI_COMMIT_SHORT_SHA"
+    name: "Documentation: $CI_COMMIT_REF_NAME $CI_COMMIT_MESSAGE"
     paths:
       - "doxygen/**"
   rules:
@@ -270,7 +274,7 @@ deploy-prod-job:
     - if: $CI_COMMIT_TAG
 
   artifacts:
-    name: "Commit $CI_COMMIT_SHORT_SHA"
+    name: "Deploy: $CI_COMMIT_REF_NAME $CI_COMMIT_MESSAGE"
     paths:
       - "doxygen/**"
       - "*.deb"
